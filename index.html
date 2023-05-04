@@ -25,7 +25,6 @@
         </label>
       </div>
 
-      <!-- <h3 id="h-faltante">Você precisa tirar <span id="faltante"></span> no G<span id="a-ou-b"></span></h3> -->
       <h3 id="h-nota">Nota <span id='final-faltante'>final</span>: <span id="final"></span></h2>
     </main>
   </div>
@@ -33,10 +32,6 @@
 <script>
   const inputGA = document.getElementById('ga');
   const inputGB = document.getElementById('gb');
-
-  const hFaltante = document.getElementById('h-faltante');
-  const notaFaltante = document.getElementById("faltante");
-  const aB = document.getElementById("a-ou-b");
 
   const spanFinalFaltante = document.getElementById('final-faltante');
   const hNotaFinal = document.getElementById('h-nota');
@@ -49,15 +44,12 @@
   window.addEventListener("load",()=>{
     inputGA.addEventListener('change', ()=>{
       ga = parseFloat(inputGA.value);
-      // if(!ga || !gb) alteraFaltante(ga, gb);
       alteraNotaFinal(calculaNota(ga, gb));
     });
     inputGB.addEventListener('change', () => {
       gb = parseFloat(inputGB.value);
-      // if (!ga || !gb) alteraFaltante(ga, gb);
       alteraNotaFinal(calculaNota(ga, gb));
     });
-    // alteraFaltante(ga, gb);
     alteraNotaFinal(calculaNota(ga,gb));
   })
 
@@ -66,17 +58,6 @@
     if(!ga) return ((media - (0.7 * gb)) / 0.3).toPrecision(2);
     return ((ga * 0.3) + (gb * 0.7)).toPrecision(2);
   }
-
-  // function alteraFaltante(ga, gb) {
-  //   if(ga && gb) {
-  //     hFaltante.hidden = true;
-  //     return;
-  //   } 
-  //   aB.textContent = ga ? "A" : "B";
-  //   notaFaltante.textContent = calculaNota(ga, gb);
-  //   hFaltante.hidden = false;
-  //    return;
-  // }
 
   function alteraNotaFinal(final) {
     spanFinalFaltante.textContent = ga && gb ? 'final' : 'faltante';
