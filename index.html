@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,56 +9,107 @@
 </head>
 <style>
   body {
-    background-color: aquamarine;
-    font-size: 16px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    min-height: 100vh;
+    margin: 0;
+    height: 100vh;
+    max-height: 100vh;
+    font-size: 16px;
+    background-color: #100b2e;
   }
-  body > div {
-    margin-top: 10%;
+
+  main {
+    margin: auto;
     max-width: min(100%, 420px);
     background-color: white;
-    border-radius: 22px;
-    padding: 1rem 2rem;
+    border-radius: 16px;
+    padding: 24px min(32px, 5%);
   }
+
   h1 {
     font-size: 24px;
+    margin: 8px 0 24px;
   }
+
   p {
     color: #525252;
+    line-height: 1.5;
+    margin: 0 0 16px 0;
+
+    &:last-child {
+      margin: 0;
+    }
   }
+
   label {
     padding: 8px 0;
     display: flex;
     flex-direction: column;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2a2a2f;
+  }
+
+  input {
+    margin: 4px 0;
+    font-size: 16px;
+    padding: 8px 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+  }
+
+  footer {
+    justify-self: flex-end;
+    font-size: 14px;
+    width: 100%;
+
+    &>div {
+      box-sizing: border-box;
+      width: min(420px, 100%);
+      text-align: center;
+      margin: 24px auto;
+      background-color: #fff;
+      border: 1px solid #2d255f;
+      border-radius: 16px;
+      padding: 18px min(24px, 2%);
+
+      & p {
+        line-height: 1.25;
+        margin: 0 0 1em 0;
+      }
+    }
   }
 </style>
-<body>
-  <div>
-    <main>
-      <h1>Quanto devo tirar no Grau ( A | B )?</h1>
-      <p>Em cursos de modalidade híbrida ou EAD da Unisinos, o Grau A vale 30% e o Grau B vale 70% da nota.</p>
-      
-      <div>
-        <label>Nota GA
-          <br>
-          <input id="ga" value="0" type="number">
-        </label>
-      </div>
-      <div>
-        <label>Nota GB
-          <br>
-          <input id="gb" value="0" type="number">
-        </label>
-      </div>
 
-      <h3 id="h-nota">Nota <span id='final-faltante'>final</span>: <span id="final"></span></h2>
-    </main>
-  </div>
+<body>
+  <main>
+    <h1>Quanto preciso tirar pra passar?</h1>
+    <div>
+      <label>Nota GA
+        <input id="ga" value="0" type="number" min="0" max="10">
+      </label>
+    </div>
+    <div>
+      <label>Nota GB
+        <input id="gb" value="0" type="number" min="0" max="10">
+      </label>
+    </div>
+    <h3 id="h-nota">Nota <span id='final-faltante'>final</span>: <span id="final"></span></h2>
+      <p>Em cursos de modalidade híbrida ou EAD da Unisinos, o Grau A vale 30% e o Grau B vale 70% da nota.</p>
+      <p>O Grau C substitui todo o Grau B. Faça só se precisar.</p>
+  </main>
+  <footer>
+    <div>
+      <p>
+        por <a id="author" href="https://github.com/cpt-westphalen" rel="noopener noreferrer"
+          target="_blank">@cpt-westphalen</a>
+      </p>
+      <p>Para o único grupo de WhatsApp interessante da Unisinos.</p>
+      <p>
+        Análise e Desenvolvimento de Sistemas, 2021/1.
+      </p>
+    </div>
+  </footer>
 </body>
 <script>
   const inputGA = document.getElementById('ga');
@@ -70,28 +122,29 @@
   let ga = 0;
   let gb = 0;
   let media = 6;
-  
-  window.addEventListener("load",()=>{
-    inputGA.addEventListener('change', ()=>{
-      ga = parseFloat(inputGA.value);
-      alteraNotaFinal(calculaNota(ga, gb));
+
+  window.addEventListener("load", () => {
+    inputGA.addEventListener('change', () => {
+      ga = parseFloat(inputGA.value || 0);
+      alteraNotaFinal(calculaNota(ga, gb).toFixed(2));
     });
     inputGB.addEventListener('change', () => {
-      gb = parseFloat(inputGB.value);
-      alteraNotaFinal(calculaNota(ga, gb));
+      gb = parseFloat(inputGB.value || 0);
+      alteraNotaFinal(calculaNota(ga, gb).toFixed(2));
     });
-    alteraNotaFinal(calculaNota(ga,gb));
-  })
+    alteraNotaFinal(calculaNota(ga, gb).toFixed(2));
+  });
 
   function calculaNota(ga, gb) {
-    if(!gb) return ((media - (0.3 * ga)) / 0.7).toPrecision(2);
-    if(!ga) return ((media - (0.7 * gb)) / 0.3).toPrecision(2);
-    return ((ga * 0.3) + (gb * 0.7)).toPrecision(2);
+    if (!gb) return ((media - (0.3 * ga)) / 0.7);
+    if (!ga) return ((media - (0.7 * gb)) / 0.3);
+    return ((ga * 0.3) + (gb * 0.7));
   }
 
   function alteraNotaFinal(final) {
     spanFinalFaltante.textContent = ga && gb ? 'final' : 'faltante';
-    notaFinal.textContent = final > 10 ? "vish" : final;
+    notaFinal.textContent = final > 10 || final < 0 ? "vish" : final;
   }
 </script>
+
 </html>
